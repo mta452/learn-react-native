@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export const SettingsScreen: React.FC = () => {
     return (
         <View style={styles.container}>
-            <Text style={{ fontSize: 28, fontWeight: 'bold' }}>Settings Screen</Text>
+            <Text style={styles.screenTitle}>Settings Screen</Text>
         </View>
     );
 }
@@ -16,5 +16,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
         gap: 16
+    },
+    screenTitle: {
+        fontSize: 28,
+        fontWeight: 'bold'
     }
 });

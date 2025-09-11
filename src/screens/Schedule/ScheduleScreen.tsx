@@ -7,7 +7,7 @@ export const ScheduleScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={{ fontSize: 28, fontWeight: 'bold' }}>Schedule Screen</Text>
+            <Text style={styles.screenTitle}>Schedule Screen</Text>
             <TouchableOpacity
                 onPress={() => {
                     navigation.goBack();
@@ -28,6 +28,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#F5FCFF',
         gap: 16
+    },
+    screenTitle: {
+        fontSize: 28,
+        fontWeight: 'bold'
     },
     backContainer: {
         padding: 12,

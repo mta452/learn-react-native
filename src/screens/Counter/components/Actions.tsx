@@ -11,15 +11,12 @@ export const Actions: React.FC<ActionsProps> = ({ style, onReset, onRandom }) =>
     return (
         <View style={[styles.container, style]}>
             <TouchableOpacity onPress={onReset}>
-                <View style={[styles.button, { backgroundColor: 'blue' }]}>
+                <View style={[styles.button, styles.blueBackground]}>
                     <Text style={styles.text}>Reset</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity
-                style={{ marginLeft: 16 }}
-                onPress={onRandom}
-            >
-                <View style={[styles.button, { backgroundColor: 'orange' }]}>
+            <TouchableOpacity onPress={onRandom}>
+                <View style={[styles.button, styles.orangeBackground]}>
                     <Text style={styles.text}>Random</Text>
                 </View>
             </TouchableOpacity>
@@ -31,7 +28,14 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        gap: 16
+    },
+    blueBackground: {
+        backgroundColor: 'blue'
+    },
+    orangeBackground: {
+        backgroundColor: 'orange'
     },
     button: {
         alignItems: 'center',

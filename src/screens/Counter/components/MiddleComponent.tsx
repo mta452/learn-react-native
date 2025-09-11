@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, ViewStyle } from 'react-native';
 
 interface MiddleComponentProps {
-    style: ViewStyle;
+    style?: ViewStyle;
     isEven: boolean;
     count: number;
 }
@@ -10,7 +10,7 @@ interface MiddleComponentProps {
 export const MiddleComponent: React.FC<MiddleComponentProps> = ({ style, isEven, count }) => {
     return (
         <View style={[styles.container, style]}>
-            <Text style={[styles.text, { marginBottom: 8 }]}>{`Number is: 📊 ${isEven ? 'Even' : 'Odd'}`}</Text>
+            <Text style={styles.text}>{`Number is: 📊 ${isEven ? 'Even' : 'Odd'}`}</Text>
             <Text style={styles.text}>{`Operations: ${count}`}</Text>
         </View>
     );
@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingHorizontal: 48,
         paddingVertical: 16,
-        borderRadius: 20
+        borderRadius: 20,
+        gap: 8
     },
     text: {
         fontSize: 20,

@@ -1,7 +1,14 @@
+import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RootStackParamList } from '../../navigation/Navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type LoginScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Login'
+>;
 
 export const LoginScreen: React.FC = () => {
   return (
@@ -16,13 +23,8 @@ function ScreenContent() {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [canSubmit, setCanSubmit] = useState(false);
 
-  const navigation = useNavigation();
-
-  useEffect(() => {
-      setCanSubmit(email.length > 0 && password.length > 0);
-  }, [email, password])
+  const navigation = useNavigation<LoginScreenNavigationProp>();
   
   return (
     <View style={styles.container}>
@@ -45,9 +47,9 @@ function ScreenContent() {
           }}
         />
         <TouchableOpacity
-          disabled={!canSubmit}
+          disabled={(email.length === 0 || password.length === 0)}
           onPress={() => {
-            navigation.navigate('Main' as never);
+            navigation.navigate('Main');
           }}
         >
           <View style={styles.submitContainer}>

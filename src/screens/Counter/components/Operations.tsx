@@ -11,15 +11,12 @@ export const Operations: React.FC<OperationsProps> = ({ style, onMinus, onPlus }
     return (
         <View style={[styles.container, style]}>
             <TouchableOpacity onPress={onMinus}>
-                <View style={[styles.button, { backgroundColor: 'red' }]}>
+                <View style={[styles.button, styles.redBackground]}>
                     <Text style={styles.text}>−</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity
-                style={{ marginLeft: 16 }}
-                onPress={onPlus}
-            >
-                <View style={[styles.button, { backgroundColor: 'green' }]}>
+            <TouchableOpacity onPress={onPlus}>
+                <View style={[styles.button, styles.greenBackground]}>
                     <Text style={styles.text}>➕</Text>
                 </View>
             </TouchableOpacity>
@@ -31,7 +28,14 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        gap: 16
+    },
+    redBackground: {
+        backgroundColor: 'red'
+    },
+    greenBackground: {
+        backgroundColor: 'green'
     },
     button: {
         alignItems: 'center',
