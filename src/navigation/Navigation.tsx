@@ -17,12 +17,12 @@ import ScheduleScreen from "../screens/Schedule";
 import SettingsScreen from "../screens/Settings";
 
 const ProfileStack = createNativeStackNavigator({
-  initialRouteName: 'ProfileRoot',
+  initialRouteName: 'Profile',
   screenOptions: {
     headerShown: false
   },
   screens: {
-    ProfileRoot: {
+    Profile: {
       screen: ProfileScreen
     },
     Learning: {
@@ -35,12 +35,13 @@ const ProfileStack = createNativeStackNavigator({
 });
 
 const RootTabs = createBottomTabNavigator({
-  initialRouteName: 'Home',
+  initialRouteName: 'HomeTab',
+  detachInactiveScreens: false,
   screenOptions: {
     headerShown: false
   },
   screens: {
-    Home: {
+    HomeTab: {
       screen: CounterScreen,
       options: {
         title: 'Home',
@@ -49,7 +50,7 @@ const RootTabs = createBottomTabNavigator({
         }
       }
     },
-    Profile: {
+    ProfileTab: {
       screen: ProfileStack,
       options: {
         title: 'Profile',
@@ -58,7 +59,7 @@ const RootTabs = createBottomTabNavigator({
         }
       }
     },
-    Settings: {
+    SettingsTab: {
       screen: SettingsScreen,
       options: {
         title: 'Settings',

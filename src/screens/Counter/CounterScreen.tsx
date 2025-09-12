@@ -11,11 +11,12 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
 import { CurrentValue } from './components/CurrentValue';
 import { MiddleComponent } from './components/MiddleComponent';
 import { Operations } from './components/Operations';
 import { Actions } from './components/Actions';
+import { useAppDispatch, useAppSelector } from '../../redux/Store';
+import { decrement, increment, random, reset } from '../../redux/CounterSlice';
 
 export const CounterScreen: React.FC = () => {
   return (
@@ -28,12 +29,10 @@ export const CounterScreen: React.FC = () => {
 function ScreenContent() {
   const safeAreaInsets = useSafeAreaInsets();
 
-  const [value, setValue] = useState(1);
-  const [operations, setOperations] = useState(0);
+  const value = useAppSelector((state) => state.counter.value);
+  const operations = useAppSelector((state) => state.counter.operations);
 
-  useEffect(() => {
-    setOperations(operations + 1);
-  }, [value]);
+  const dispatch = useAppDispatch();
 
   return (
     <ScrollView contentContainerStyle={[styles.container, { paddingTop: safeAreaInsets.top }]}>
@@ -53,25 +52,15 @@ function ScreenContent() {
       />
 
       <Operations
-        onMinus={() => {
-          if (value > 1) {
-            setValue(value - 1);
-          }
-        }}
-        onPlus={() => {
-          if (value < 100) {
-            setValue(value + 1);
-          }
-        }}
+        onMinus={() => { dispatch(decrement()); }}
+        onPlus={() => { dispatch(increment()); }}
       />
 
       <Actions
-        onReset={() => {
-          setValue(1);
-        }}
+        onReset={() => { dispatch(reset()); }}
         onRandom={() => {
           const randomValue = Math.floor(Math.random() * 100) + 1;
-          setValue(randomValue);
+          dispatch(random(randomValue));
         }}
       />
     </ScrollView>

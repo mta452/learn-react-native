@@ -13,10 +13,11 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { ProfileStackParamList } from '../../navigation/Navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAppSelector } from '../../redux/Store';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
-  'ProfileRoot'
+  'Profile'
 >;
 
 export const ProfileScreen: React.FC = () => {
@@ -29,8 +30,12 @@ export const ProfileScreen: React.FC = () => {
 
 function ScreenContent() {
   const safeAreaInsets = useSafeAreaInsets();
-
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+
+  const firstName = useAppSelector((state) => state.user.firstName);
+  const lastName = useAppSelector((state) => state.user.lastName);
+  const description = useAppSelector((state) => state.user.description);
+  const yearsOfExperience = useAppSelector((state) => state.user.yearsOfExperience);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -46,8 +51,8 @@ function ScreenContent() {
           source={require('../../../assets/profile.jpg')}
           // source={{ uri: 'https://reactnative.dev/docs/assets/p_cat2.png' }}
         />
-        <Text style={styles.headerTitle}>John Developer</Text>
-        <Text style={styles.headerSubtitle}>iOS Developer transitioning to React Native</Text>
+        <Text style={styles.headerTitle}>{firstName} {lastName}</Text>
+        <Text style={styles.headerSubtitle}>{description}</Text>
       </View>
 
       {/* Content View */}
@@ -55,7 +60,7 @@ function ScreenContent() {
         {/* Learning Section */}
         <View style={[styles.roundedSection, styles.learningSection]}>
           <View style={styles.learningItem}>
-            <Text style={[styles.boldText, styles.blueText]}>6</Text>
+            <Text style={[styles.boldText, styles.blueText]}>{yearsOfExperience.toString()}</Text>
             <Text style={styles.normalText}>Years iOS</Text>
           </View>
           <View style={styles.learningItem}>
