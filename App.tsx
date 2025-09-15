@@ -6,13 +6,18 @@
  */
 
 import { Provider } from 'react-redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Navigation } from './src/navigation/Navigation';
 import { store } from './src/redux/Store';
+import { StatusBar } from 'react-native';
 
 function App() {
   return (
     <Provider store={store}>
-      <Navigation />
+      <SafeAreaProvider>
+        <StatusBar barStyle={'dark-content'} />
+        <Navigation />
+      </SafeAreaProvider>
     </Provider>
   );
 }

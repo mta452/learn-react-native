@@ -6,10 +6,7 @@
  */
 
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ProfileStackParamList } from '../../navigation/Navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -21,17 +18,10 @@ type ProfileScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export const ProfileScreen: React.FC = () => {
-  return (
-    <SafeAreaProvider>
-      <ScreenContent />
-    </SafeAreaProvider>
-  );
-}
-
-function ScreenContent() {
   const safeAreaInsets = useSafeAreaInsets();
   const navigation = useNavigation<ProfileScreenNavigationProp>();
 
+  const counter = useAppSelector((state) => state.counter.value);
   const firstName = useAppSelector((state) => state.user.firstName);
   const lastName = useAppSelector((state) => state.user.lastName);
   const description = useAppSelector((state) => state.user.description);
@@ -41,7 +31,9 @@ function ScreenContent() {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Top Bar */}
       <View style={[styles.topBar, {paddingTop: safeAreaInsets.top}]}>
+        <Text style={styles.topBarText}> </Text>
         <Text style={styles.topBarText}>Profile</Text>
+        <Text style={styles.topBarText}>{counter}</Text>
       </View>
 
       {/* Header View */}
@@ -190,10 +182,11 @@ const styles = StyleSheet.create({
     color: '#FF9503'
   },
   topBar: {
-    flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'space-between',
+    alignItems: 'stretch',
+    paddingHorizontal: 16,
+    width: '100%'
   },
   topBarText: {
     color: 'white',
@@ -225,6 +218,7 @@ const styles = StyleSheet.create({
     marginTop: 8
   },
   contentView: {
+    width: '100%',
     backgroundColor: '#F5F5F5',
     borderRadius: 16,
     gap: 16

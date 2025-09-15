@@ -1,22 +1,14 @@
 import React from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet, Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppDispatch, useAppSelector } from '../../redux/Store';
 import { setFirstName, setLastName, setDescription, setYearsOfExperience } from '../../redux/UserSlice';
 
-const { width } = Dimensions.get('window');
-
 export const SettingsScreen: React.FC = () => {
-    return (
-        <SafeAreaProvider>
-            <ScreenContent />
-        </SafeAreaProvider>
-    );
-};
-
-function ScreenContent() {
     const safeAreaInsets = useSafeAreaInsets();
+    const dimensions = useWindowDimensions();
 
+    const counter = useAppSelector((state) => state.counter.value);
     const firstName = useAppSelector((state) => state.user.firstName);
     const lastName = useAppSelector((state) => state.user.lastName);
     const description = useAppSelector((state) => state.user.description);
@@ -26,11 +18,14 @@ function ScreenContent() {
     
     return (
         <View style={[styles.container, { paddingTop: safeAreaInsets.top, paddingBottom: safeAreaInsets.bottom }]}>
-            <Text style={styles.screenTitle}>Settings Screen</Text>
+            <View style={styles.titleContainer}>
+                <Text style={styles.screenTitle}>Settings Screen</Text>
+                <Text style={styles.screenTitle}>{counter}</Text>
+            </View>
 
             <ScrollView contentContainerStyle={[styles.inputContainer]}>    
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput, { width: dimensions.width - 32 }]}
                     placeholder="First Name"
                     placeholderTextColor={'#555'}
                     value={firstName}
@@ -39,7 +34,7 @@ function ScreenContent() {
                     }}
                 />
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput, { width: dimensions.width - 32 }]}
                     placeholder="Last Name"
                     placeholderTextColor={'#555'}
                     value={lastName}
@@ -48,7 +43,7 @@ function ScreenContent() {
                     }}
                 />
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput, { width: dimensions.width - 32 }]}
                     placeholder="Description"
                     placeholderTextColor={'#555'}
                     value={description}
@@ -57,7 +52,7 @@ function ScreenContent() {
                     }}
                 />
                 <TextInput
-                    style={styles.textInput}
+                    style={[styles.textInput, { width: dimensions.width - 32 }]}
                     placeholder="Years of Experience"
                     placeholderTextColor={'#555'}
                     value={yearsOfExperience.toString()}
@@ -80,6 +75,13 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         gap: 16
     },
+    titleContainer: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 8
+    },
     screenTitle: {
         fontSize: 28,
         fontWeight: 'bold'
@@ -91,7 +93,6 @@ const styles = StyleSheet.create({
         rowGap: 16
     },
     textInput: {
-        width: width - 32,
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,

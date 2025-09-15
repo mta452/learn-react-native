@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../navigation/Navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -11,14 +11,6 @@ type LoginScreenNavigationProp = NativeStackNavigationProp<
 >;
 
 export const LoginScreen: React.FC = () => {
-  return (
-    <SafeAreaProvider>
-      <ScreenContent />
-    </SafeAreaProvider>
-  );
-};
-
-function ScreenContent() {
   const safeAreaInsets = useSafeAreaInsets();
   
   const [email, setEmail] = useState('');

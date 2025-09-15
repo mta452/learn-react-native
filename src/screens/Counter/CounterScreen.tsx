@@ -7,10 +7,7 @@
 
 import { StyleSheet, ScrollView } from 'react-native';
 import { HeaderView } from './components/HeaderView';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CurrentValue } from './components/CurrentValue';
 import { MiddleComponent } from './components/MiddleComponent';
 import { Operations } from './components/Operations';
@@ -19,14 +16,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/Store';
 import { decrement, increment, random, reset } from '../../redux/CounterSlice';
 
 export const CounterScreen: React.FC = () => {
-  return (
-    <SafeAreaProvider>
-      <ScreenContent />
-    </SafeAreaProvider>
-  );
-}
-
-function ScreenContent() {
   const safeAreaInsets = useSafeAreaInsets();
 
   const value = useAppSelector((state) => state.counter.value);
