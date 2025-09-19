@@ -15,6 +15,10 @@ import LoginScreen from "../screens/Login";
 import ProfileScreen from "../screens/Profile";
 import ScheduleScreen from "../screens/Schedule";
 import SettingsScreen from "../screens/Settings";
+import NewsHomeScreen from "../screens/News/NewsHomeScreen";
+import NewsSearchScreen from "../screens/News/NewsSearchScreen";
+import ArticleDetailScreen from "../screens/News/ArticleDetailScreen";
+import { Article } from "../api/newsApi";
 
 const ProfileStack = createNativeStackNavigator({
   initialRouteName: 'Profile',
@@ -30,6 +34,24 @@ const ProfileStack = createNativeStackNavigator({
     },
     Schedule: {
       screen: ScheduleScreen
+    }
+  }
+});
+
+const NewsStack = createNativeStackNavigator({
+  initialRouteName: 'NewsHome',
+  screenOptions: {
+    headerShown: false
+  },
+  screens: {
+    NewsHome: {
+      screen: NewsHomeScreen
+    },
+    NewsSearch: {
+      screen: NewsSearchScreen
+    },
+    ArticleDetail: {
+      screen: ArticleDetailScreen
     }
   }
 });
@@ -57,6 +79,15 @@ const RootTabs = createBottomTabNavigator({
         tabBarIcon: ({ color, size }) => {
           return <Image source={require('../../assets/user.png')} style={{ width: size, height: size, tintColor: color }} />;
         }
+      }
+    },
+    NewsTab: {
+      screen: NewsStack,
+      options: {
+        title: 'News',
+        // tabBarIcon: ({ color, size }) => {
+        //   return <Image source={require('../../assets/news.png')} style={{ width: size, height: size, tintColor: color }} />;
+        // }
       }
     },
     SettingsTab: {
@@ -89,5 +120,10 @@ const RootStack = createNativeStackNavigator({
 export type RootStackParamList = StaticParamList<typeof RootStack>;
 export type RootTabsParamList = StaticParamList<typeof RootTabs>;
 export type ProfileStackParamList = StaticParamList<typeof ProfileStack>;
+export type NewsStackParamList = {
+  NewsHome: undefined;
+  NewsSearch: undefined;
+  ArticleDetail: { article: Article };
+};;
 
 export const Navigation = createStaticNavigation(RootStack);
