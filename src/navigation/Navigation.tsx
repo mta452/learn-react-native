@@ -124,6 +124,6 @@ export type NewsStackParamList = {
   NewsHome: undefined;
   NewsSearch: undefined;
   ArticleDetail: { article: Article };
-};;
+};
 
 export const Navigation = createStaticNavigation(RootStack);

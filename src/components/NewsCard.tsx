@@ -2,11 +2,11 @@ import React from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 import { Article } from '../api/newsApi';
+import FastImage from '@d11/react-native-fast-image';
 
 interface NewsCardProps {
   article: Article;
@@ -28,7 +28,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, onPress }) => {
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.fullContent}>
         {article.urlToImage && (
-          <Image
+          <FastImage
             source={{ uri: article.urlToImage }}
             style={styles.image}
             resizeMode='cover'

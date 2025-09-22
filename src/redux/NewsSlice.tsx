@@ -1,5 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import newsApi, { Article } from '../api/newsApi';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Article } from '../api/newsApi';
+import { fetchTopHeadlines, searchNews } from './actions/newsActions';
 
 interface ArticleState {
   currentPage: number;
@@ -13,70 +14,6 @@ interface ArticleState {
   searchArticles: Article[];
   searchError?: string;
 }
-
-interface FetchTopHeadlinesParams {
-  country?: string;
-  category?: string;
-  pageSize?: number;
-  page?: number;
-}
-
-interface SearchNewsParams {
-  query: string,
-  sortBy?: string,
-  pageSize?: number,
-  page?: number
-}
-
-export const fetchTopHeadlines = createAsyncThunk<
-  Article[],
-  FetchTopHeadlinesParams
->(
-  'news/fetchTopHeadlines',
-  async (params = {}, { rejectWithValue }) => {
-    try {
-      const response = await newsApi.fetchTopHeadlines(
-        params.country,
-        params.category,
-        params.pageSize,
-        params.page
-      );
-
-      if (response.status === 'error') {
-        return rejectWithValue(response.message);
-      }
-
-      return response.articles || [];
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
-
-export const searchNews = createAsyncThunk<
-  Article[],
-  SearchNewsParams
->(
-  'news/search',
-  async (params, { rejectWithValue }) => {
-    try {
-      const response = await newsApi.fetchEverything(
-        params.query,
-        params.sortBy,
-        params.pageSize,
-        params.page
-      );
-
-      if (response.status === 'error') {
-        return rejectWithValue(response.message);
-      }
-
-      return response.articles || [];
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || error.message);
-    }
-  }
-);
 
 const initialState: ArticleState = {
   currentPage: 1,

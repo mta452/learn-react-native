@@ -3,8 +3,6 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  TouchableOpacity,
-  Image,
   Linking,
   Alert
 } from 'react-native';
@@ -12,6 +10,8 @@ import { NewsStackParamList } from '../../navigation/Navigation';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import FastImage from '@d11/react-native-fast-image';
+import PrimaryButton from '../../components/PrimaryButton';
 
 type NavigationProp = NativeStackNavigationProp<NewsStackParamList, 'ArticleDetail'>;
 
@@ -48,7 +48,7 @@ const ArticleDetailScreen: React.FC<DetailScreenProps> = ({ route }) => {
       contentContainerStyle={{paddingTop: safeAreaInsets.top}}
     >
       {article.urlToImage && (
-        <Image
+        <FastImage
           source={{ uri: article.urlToImage }}
           style={styles.image}
           resizeMode="cover"
@@ -77,21 +77,21 @@ const ArticleDetailScreen: React.FC<DetailScreenProps> = ({ route }) => {
           <Text style={styles.articleContent}>{article.content}</Text>
         )}
         
-        <TouchableOpacity
-          style={[styles.button, styles.readFullButton]}
+        <PrimaryButton
+          style={styles.readFullButton}
+          title={'Read Full Article'}
+          titleStyle={styles.buttonText}
           onPress={handleOpenFullArticle}
-        >
-          <Text style={styles.buttonText}>Read Full Article</Text>
-        </TouchableOpacity>
+        />
 
-        <TouchableOpacity
-          style={[styles.button, styles.goBackButton]}
+        <PrimaryButton
+          style={styles.goBackButton}
+          title={'Go Back'}
+          titleStyle={styles.buttonText}
           onPress={() => {
             navigation.goBack();
           }}
-        >
-          <Text style={styles.buttonText}>Go Back</Text>
-        </TouchableOpacity>
+        />
       </View>
     </ScrollView>
   );
@@ -152,14 +152,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    alignItems: 'center',
-    minWidth: 120,
   },
   readFullButton: {
     backgroundColor: '#007AFF',

@@ -10,13 +10,14 @@ import {
   Alert,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../redux/Store';
-import { fetchTopHeadlines, setSelectedCategory } from '../../redux/NewsSlice';
-import { NEWS_CATEGORIES } from '../../redux/actions/newsActions';
+import { setSelectedCategory } from '../../redux/NewsSlice';
+import { fetchTopHeadlines, NEWS_CATEGORIES } from '../../redux/actions/newsActions';
 import NewsCard from '../../components/NewsCard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { NewsStackParamList } from '../../navigation/Navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import PrimaryButton from '../../components/PrimaryButton';
 
 type HomeNavigationProp = NativeStackNavigationProp<
   NewsStackParamList,
@@ -71,14 +72,12 @@ const NewsHomeScreen = () => {
     <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>
       <View style={styles.header}>
         <Text style={styles.headerTitle}>News Headlines</Text>
-        <TouchableOpacity
-          style={styles.searchButton}
+        <PrimaryButton
+          title={'Search'}
           onPress={() => {
             navigation.navigate('NewsSearch')
           }}
-        >
-          <Text style={styles.searchButtonText}>Search</Text>
-        </TouchableOpacity>
+        />
       </View>
       
       <FlatList
@@ -157,16 +156,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
-  },
-  searchButton: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  searchButtonText: {
-    color: '#fff',
-    fontWeight: '600',
   },
   categoryList: {
     backgroundColor: '#fff',

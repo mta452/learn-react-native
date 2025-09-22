@@ -5,17 +5,18 @@ import {
   TextInput,
   FlatList,
   StyleSheet,
-  TouchableOpacity,
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import { clearSearchResults, searchNews, setSearchQuery } from '../../redux/NewsSlice';
+import { clearSearchResults, setSearchQuery } from '../../redux/NewsSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/Store';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NewsStackParamList } from '../../navigation/Navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import NewsCard from '../../components/NewsCard';
+import { searchNews } from '../../redux/actions/newsActions';
+import PrimaryButton from '../../components/PrimaryButton';
 
 type SearchProps = NativeStackNavigationProp<
   NewsStackParamList,
@@ -56,13 +57,12 @@ const NewsSearchScreen = () => {
     <View style={[styles.container, { paddingTop: safeAreaInsets.top }]}>
       <View style={styles.searchContainer}>
         { !searchQuery && (
-          <TouchableOpacity
+          <PrimaryButton
             style={styles.backButton}
-            onPress={handleBack}
+            title={'Back'}
             disabled={searchLoading}
-          >
-            <Text style={styles.buttonText}>Back</Text>
-          </TouchableOpacity>
+            onPress={handleBack}
+          />
         )}
         <TextInput
           style={styles.searchInput}
@@ -72,24 +72,23 @@ const NewsSearchScreen = () => {
           onSubmitEditing={handleSearch}
           returnKeyType="search"
         />
-        <TouchableOpacity
-          style={styles.searchButton}
+        <PrimaryButton
           onPress={handleSearch}
           disabled={searchLoading}
-        >
-          {searchLoading ? (
-            <ActivityIndicator color="#fff" size="small" />
-          ) : (
-            <Text style={styles.buttonText}>Search</Text>
-          )}
-        </TouchableOpacity>
+          content={
+            searchLoading ? (
+              <ActivityIndicator color="#fff" size="small" />
+            ) : (
+              <Text style={styles.buttonText}>Search</Text>
+            )
+          }
+        />
         {searchQuery && (
-          <TouchableOpacity
-            style={styles.clearButton}
+          <PrimaryButton
+            backgroundColor={'#ff3333'}
+            title={'Clear'}
             onPress={handleClearSearch}
-          >
-            <Text style={styles.clearButtonText}>Clear</Text>
-          </TouchableOpacity>
+          />
         )}
       </View>
 
@@ -160,31 +159,12 @@ const styles = StyleSheet.create({
   },
   backButton: {
     backgroundColor: '#ff3333',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
-    minWidth: 80,
-    alignItems: 'center',
+    minWidth: 80
   },
   searchButton: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 8,
-    minWidth: 80,
-    alignItems: 'center',
+    minWidth: 80
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
-  clearButton: {
-    backgroundColor: '#ff3333',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 8
-  },
-  clearButtonText: {
     color: '#fff',
     fontWeight: '600',
   },
