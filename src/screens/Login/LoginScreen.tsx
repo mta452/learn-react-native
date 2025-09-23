@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootStackParamList } from '../../navigation/Navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { checkUser, loginUser } from '../../redux/actions/userActions';
+import { useAppDispatch, useAppSelector } from '../../redux/Store';
 
 type LoginScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -12,21 +14,50 @@ type LoginScreenNavigationProp = NativeStackNavigationProp<
 
 export const LoginScreen: React.FC = () => {
   const safeAreaInsets = useSafeAreaInsets();
+  const dispatch = useAppDispatch();
   
-  const [email, setEmail] = useState('');
+  const hasUser = useAppSelector((state) => state.user.hasUser);
+  const loading = useAppSelector((state) => state.user.loading);
+  const error = useAppSelector((state) => state.user.error);
+
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation<LoginScreenNavigationProp>();
+
+  useEffect(() => {
+    dispatch(checkUser());
+  }, []);
+
+  useEffect(() => {
+    if (hasUser) {
+      navigation.navigate('Main');
+    }
+  }, [hasUser])
   
+  useEffect(() => {
+    if (error) {
+      Alert.alert('Error', error);
+    }
+  }, [error]);
+
+  if (loading || hasUser) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={[styles.contentContainer, { paddingTop: safeAreaInsets.top, paddingBottom: safeAreaInsets.bottom }]}>
         <TextInput
           style={styles.textInput}
-          placeholder="Email"
+          placeholder="Username"
           placeholderTextColor={'#555'}
           onChangeText={(text) => {
-            setEmail(text);
+            setUsername(text);
           }}
         />
         <TextInput
@@ -39,9 +70,9 @@ export const LoginScreen: React.FC = () => {
           }}
         />
         <TouchableOpacity
-          disabled={(email.length === 0 || password.length === 0)}
+          disabled={(username.length === 0 || password.length === 0)}
           onPress={() => {
-            navigation.navigate('Main');
+            dispatch(loginUser({username, password}));
           }}
         >
           <View style={styles.submitContainer}>
@@ -59,6 +90,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F5F5F5',
+    },
+    centerContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f5f5f5',
     },
     contentContainer: {
         alignItems: 'center',
