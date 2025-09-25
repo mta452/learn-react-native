@@ -11,6 +11,8 @@ import { useNavigation } from '@react-navigation/native';
 import { ProfileStackParamList } from '../../navigation/Navigation';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppSelector } from '../../redux/Store';
+import { launchImageLibrary } from 'react-native-image-picker';
+import { useState } from 'react';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
@@ -27,6 +29,19 @@ export const ProfileScreen: React.FC = () => {
   const description = useAppSelector((state) => state.user.description);
   const yearsOfExperience = useAppSelector((state) => state.user.yearsOfExperience);
 
+  const [imageUri, setImageUri] = useState<string | undefined>();
+
+  const handlePhoto = async () => {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+      selectionLimit: 1
+    });
+
+    if ((result.assets?.length || 0) > 0) {
+      setImageUri(result.assets?.at(0)?.uri);
+    }
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Top Bar */}
@@ -38,11 +53,18 @@ export const ProfileScreen: React.FC = () => {
 
       {/* Header View */}
       <View style={styles.headerView}>
-        <Image
-          style={styles.headerImage}
-          source={require('../../../assets/profile.jpg')}
-          // source={{ uri: 'https://reactnative.dev/docs/assets/p_cat2.png' }}
-        />
+        <TouchableOpacity
+          onPress={handlePhoto}
+        >
+          <Image
+            style={styles.headerImage}
+            source={
+              imageUri
+              ? { uri: imageUri }
+              : require('../../../assets/profile.jpg')
+            }
+          />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>{firstName} {lastName}</Text>
         <Text style={styles.headerSubtitle}>{description}</Text>
       </View>

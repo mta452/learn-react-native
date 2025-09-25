@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../redux/Store';
-import { setSelectedCategory } from '../../redux/NewsSlice';
+import { resetCurrentPage, setSearchQuery, setSelectedCategory } from '../../redux/NewsSlice';
 import { fetchTopHeadlines, NEWS_CATEGORIES } from '../../redux/actions/newsActions';
 import NewsCard from '../../components/NewsCard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -28,8 +28,9 @@ const NewsHomeScreen = () => {
   const safeAreaInsets = useSafeAreaInsets();
   const navigation = useNavigation<HomeNavigationProp>();
   const dispatch = useAppDispatch();
-  const { articles, loading, error, selectedCategory } = useAppSelector(state => state.news);
+  const { currentPage, articles, loading, error, selectedCategory } = useAppSelector(state => state.news);
   const [refreshing, setRefreshing] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
     loadNews();
@@ -41,23 +42,29 @@ const NewsHomeScreen = () => {
     }
   }, [error]);
 
-  const loadNews = () => {
-    dispatch(fetchTopHeadlines({ 
+  const loadNews = async (page: number = 1) => {
+    await dispatch(fetchTopHeadlines({ 
       category: selectedCategory,
       country: 'us',
-      pageSize: 20 
+      pageSize: 12,
+      page: page
     }));
   };
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await dispatch(fetchTopHeadlines({ 
-      category: selectedCategory,
-      country: 'us',
-      pageSize: 20 
-    }));
+    dispatch(resetCurrentPage());
+    await loadNews();
     setRefreshing(false);
   };
+
+  const handleLoadMore = async () => {
+    if (!refreshing && !loadingMore && articles.length !== 0) {
+      setLoadingMore(true);
+      await loadNews(currentPage);
+      setLoadingMore(false);
+    }
+  }
 
   if (loading && !refreshing) {
     return (
@@ -127,6 +134,8 @@ const NewsHomeScreen = () => {
         }
         contentContainerStyle={styles.newsList}
         showsVerticalScrollIndicator={false}
+        onEndReachedThreshold={0.3}
+        onEndReached={handleLoadMore}
       />
     </View>
   );

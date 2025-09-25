@@ -27,20 +27,27 @@ const NewsSearchScreen = () => {
   const safeAreaInsets = useSafeAreaInsets();
   const navigation = useNavigation<SearchProps>();
   const dispatch = useAppDispatch();
-  const { searchArticles, searchLoading, searchError, searchQuery } = useAppSelector(state => state.news);
+
+  const { searchPage, searchArticles, searchLoading, searchError, searchQuery } = useAppSelector(state => state.news);
   const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const loadNews = async (page: number = 1) => {
+    await dispatch(searchNews({ 
+      query: localSearchQuery,
+      pageSize: 20,
+      page: page
+    }));
+  };
 
   const handleBack = () => {
     navigation.goBack();
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (localSearchQuery.trim()) {
       dispatch(setSearchQuery(localSearchQuery));
-      dispatch(searchNews({ 
-        query: localSearchQuery,
-        pageSize: 20 
-      }));
+      await loadNews();
     }
   };
 
@@ -48,6 +55,14 @@ const NewsSearchScreen = () => {
     setLocalSearchQuery('');
     dispatch(clearSearchResults());
   };
+
+  const handleLoadMore = async () => {
+    if (!loadingMore && searchArticles.length !== 0) {
+      setLoadingMore(true);
+      await loadNews(searchPage);
+      setLoadingMore(false);
+    }
+  }
 
   if (searchError) {
     Alert.alert('Search Error', searchError);
@@ -128,6 +143,8 @@ const NewsSearchScreen = () => {
               </View>
             )
           }
+          onEndReachedThreshold={0.2}
+          onEndReached={handleLoadMore}
         />
       )}
     </View>
